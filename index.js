@@ -38,34 +38,33 @@ app.get("/api/v1/auth/login", (req, res) => {
 });
 
 // Database connection
+mongoose.set("strictQuery", false);
+const connectDB = async () => {
+  try {
+    await mongoose.connect(
+      "mongodb://rishabh22:@password12345@medisync.ujpzl.mongodb.net/?retryWrites=true&w=majority&appName=Medisync"
+    );
+    console.log("MongoDB database is connected");
+  } catch (err) {
+    console.log("MongoDB database connection failed", err);
+  }
+};
+
 // mongoose.set("strictQuery", false);
+
 // const connectDB = async () => {
+//   const mongoURL = "mongodb://localhost:27017/medicare";
+
 //   try {
-//     await mongoose.connect(process.env.MONGO_URL, {
-//       // useNewUrlParser: true,
-//       useUnifiedTopology: true,
+//     await mongoose.connect(mongoURL, {
+//       // useNewUrlParser: true,  // No longer needed in MongoDB Node.js driver version 4.0 and above
+//       useUnifiedTopology: true,  // Also not needed in the latest MongoDB Node.js driver versions
 //     });
 //     console.log("MongoDB database is connected");
 //   } catch (err) {
 //     console.log("MongoDB database connection failed", err);
 //   }
 // };
-
-mongoose.set("strictQuery", false);
-
-const connectDB = async () => {
-  const mongoURL = "mongodb://localhost:27017/medicare";
-
-  try {
-    await mongoose.connect(mongoURL, {
-      // useNewUrlParser: true,  // No longer needed in MongoDB Node.js driver version 4.0 and above
-      useUnifiedTopology: true,  // Also not needed in the latest MongoDB Node.js driver versions
-    });
-    console.log("MongoDB database is connected");
-  } catch (err) {
-    console.log("MongoDB database connection failed", err);
-  }
-};
 
 
 
