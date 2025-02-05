@@ -20,7 +20,7 @@ console.log("MongoDB URL:", process.env.MONGO_URL);
 
 app.use(
   cors({
-    origin: "https://medicare-divyenduvimals-projects-0a9ec642.vercel.app",
+    origin: "http://0.0.0.0:port",
     credentials: true, // If your API uses cookies for authentication
   })
 );
@@ -38,18 +38,36 @@ app.get("/api/v1/auth/login", (req, res) => {
 });
 
 // Database connection
+// mongoose.set("strictQuery", false);
+// const connectDB = async () => {
+//   try {
+//     await mongoose.connect(process.env.MONGO_URL, {
+//       // useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     });
+//     console.log("MongoDB database is connected");
+//   } catch (err) {
+//     console.log("MongoDB database connection failed", err);
+//   }
+// };
+
 mongoose.set("strictQuery", false);
+
 const connectDB = async () => {
+  const mongoURL = "mongodb://localhost:27017/medicare";
+
   try {
-    await mongoose.connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    await mongoose.connect(mongoURL, {
+      // useNewUrlParser: true,  // No longer needed in MongoDB Node.js driver version 4.0 and above
+      useUnifiedTopology: true,  // Also not needed in the latest MongoDB Node.js driver versions
     });
     console.log("MongoDB database is connected");
   } catch (err) {
     console.log("MongoDB database connection failed", err);
   }
 };
+
+
 
 app.use("/api/v1/auth", authRoute); // domain/api/v1/auth/register
 app.use("/api/v1/users", userRoute);
