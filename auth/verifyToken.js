@@ -9,11 +9,18 @@ export const authenticate=async(req,res,next)=>{
     }
     try{
         const token=authToken.split(" ")[1];
-        const decoded=jwt.verify(token,process.env.JWT_SECRET_KEY)
-        req.userId=decoded.id
-        req.role=decoded.role
-
-        next(); //must be called 
+        const decoded=jwt.verify(token,process.env.JWT_SECRET_KEY, (err, authData) => {
+             if(err){
+                 res.send({
+                     "message": "Invalid token!"
+                 })
+             }
+            else{
+                req.userId=decoded.id
+                req.role=decoded.role
+                next()
+            }
+        }) 
     }
     catch(err){
         if(err.name==="TokenExpiredError")
@@ -24,6 +31,7 @@ export const authenticate=async(req,res,next)=>{
         return res.status(401).json({success: false, message:'Invalid Token'})
     }
 };
+
 export const restrict= roles=> async(req,res,next)=>{
     const userId = req.userId;
     let user;
